@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DevIO.Data.Repository
 {
-    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity, new()
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity, new()//'new()' permite instanciar a entidade
     {
         protected readonly MeuDbContext Db;
         protected readonly DbSet<TEntity> DbSet;
@@ -46,6 +46,8 @@ namespace DevIO.Data.Repository
 
         public virtual async Task Remover(Guid id)
         {
+            //o 'new()' nos permite criar a entidade genérica e atribuir o respectivo ID da busca, dessa forma remove-se o objeto
+            //sem a necessidade de buscá-lo no BD
             DbSet.Remove(new TEntity { Id = id });
             await SaveChanges();
         }
