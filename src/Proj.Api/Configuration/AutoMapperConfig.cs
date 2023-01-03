@@ -13,8 +13,12 @@ namespace Proj.Api.Configuration
         {
             CreateMap<Fornecedor, AddFornecedorViewModel>().ReverseMap();
             CreateMap<Fornecedor, FornecedorViewModel>().ReverseMap();
+
             CreateMap<Endereco, EnderecoViewModel>().ReverseMap();
+            CreateMap<Endereco, AddEnderecoViewModel>().ReverseMap();
+
             CreateMap<Produto, ProdutoViewModel>().ReverseMap();
+            CreateMap<Produto, AddProdutoViewModel>().ReverseMap();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Proj.Api.Controllers
         [HttpGet("getAll")]
         public async Task<ActionResult<IEnumerable<FornecedorViewModel>>> GetAll()
         {
-            var fornecedores = _mapper.Map<IEnumerable<FornecedorViewModel>>(await _fornecedorRepository.GetAll());
+            var fornecedores = _mapper.Map<IEnumerable<FornecedorViewModel>>(await _fornecedorRepository.GetAllFornecedorProdutosEndereco());
 
             return Ok(fornecedores);
         }

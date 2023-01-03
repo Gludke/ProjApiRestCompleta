@@ -22,7 +22,5 @@ namespace Proj.Api.ViewModels.Produto
         public DateTime DataCadastro { get; set; }
 
         public bool Ativo { get; set; }
-
-        public string NomeFornecedor { get; set; }
     }
 }

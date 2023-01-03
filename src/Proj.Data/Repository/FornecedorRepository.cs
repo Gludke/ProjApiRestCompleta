@@ -11,6 +11,14 @@ namespace DevIO.Data.Repository
         {
         }
 
+        public async Task<IEnumerable<Fornecedor>> GetAllFornecedorProdutosEndereco()
+        {
+            return await Db.Fornecedores.AsNoTracking()
+                .Include(c => c.Produtos)
+                .Include(c => c.Endereco)
+                .ToListAsync();
+        }
+
         public async Task<Fornecedor> GetFornecedorEndereco(Guid id)
         {
             return await Db.Fornecedores.AsNoTracking()
