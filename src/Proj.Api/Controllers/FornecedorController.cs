@@ -2,7 +2,7 @@
 using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
 using Microsoft.AspNetCore.Mvc;
-using Proj.Api.ViewModels;
+using Proj.Api.ViewModels.Fornecedor;
 using System.Collections.Generic;
 
 namespace Proj.Api.Controllers
@@ -40,7 +40,7 @@ namespace Proj.Api.Controllers
 ;       }
 
         [HttpPost("register")]
-        public async Task<ActionResult<FornecedorViewModel>> Register([FromBody] FornecedorViewModel viewModel)
+        public async Task<ActionResult<Fornecedor>> Register([FromBody] AddFornecedorViewModel viewModel)
         {
             if(!ModelState.IsValid) return BadRequest();
 
@@ -50,7 +50,7 @@ namespace Proj.Api.Controllers
 
             if(!result) return BadRequest();
 
-            return Ok(viewModel);
+            return Ok(fornecedorMapp);
         }
 
 

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using DevIO.Business.Models;
-using Proj.Api.ViewModels;
+using Proj.Api.ViewModels.Endereco;
+using Proj.Api.ViewModels.Fornecedor;
+using Proj.Api.ViewModels.Produto;
 
 namespace Proj.Api.Configuration
 {
@@ -9,6 +11,7 @@ namespace Proj.Api.Configuration
     {
         public AutoMapperConfig()
         {
+            CreateMap<Fornecedor, AddFornecedorViewModel>().ReverseMap();
             CreateMap<Fornecedor, FornecedorViewModel>().ReverseMap();
             CreateMap<Endereco, EnderecoViewModel>().ReverseMap();
             CreateMap<Produto, ProdutoViewModel>().ReverseMap();

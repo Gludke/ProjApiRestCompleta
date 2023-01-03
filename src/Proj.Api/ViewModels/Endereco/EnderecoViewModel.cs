@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Proj.Api.ViewModels
+namespace Proj.Api.ViewModels.Endereco
 {
     public class EnderecoViewModel
     {

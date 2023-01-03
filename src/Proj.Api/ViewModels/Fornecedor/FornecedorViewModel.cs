@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Proj.Api.ViewModels.Endereco;
+using Proj.Api.ViewModels.Produto;
 
-namespace Proj.Api.ViewModels
+namespace Proj.Api.ViewModels.Fornecedor
 {
     public class FornecedorViewModel
     {
