@@ -3,7 +3,6 @@ using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
 using Microsoft.AspNetCore.Mvc;
 using Proj.Api.ViewModels.Fornecedor;
-using System.Collections.Generic;
 
 namespace Proj.Api.Controllers
 {
@@ -44,9 +43,7 @@ namespace Proj.Api.Controllers
         {
             if(!ModelState.IsValid) return BadRequest();
 
-            var fornecedorMapp = _mapper.Map<Fornecedor>(viewModel);
-
-            var result = await _fornecedorService.Add(fornecedorMapp);
+            var result = await _fornecedorService.Add(viewModel);
 
             if(!result) return BadRequest();
 

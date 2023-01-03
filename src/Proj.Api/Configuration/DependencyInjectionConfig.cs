@@ -1,4 +1,5 @@
 ﻿using DevIO.Business.Intefaces;
+using DevIO.Business.Notificacoes;
 using DevIO.Business.Services;
 using DevIO.Data.Context;
 using DevIO.Data.Repository;
@@ -12,8 +13,12 @@ namespace Proj.Api.Configuration
             service.AddScoped<MeuDbContext>();
             
             service.AddScoped<IFornecedorRepository, FornecedorRepository>();
+            service.AddScoped<IEnderecoRepository, EnderecoRepository>();
+            service.AddScoped<IProdutoRepository, ProdutoRepository>();
 
             service.AddScoped<IFornecedorService, FornecedorService>();
+
+            service.AddScoped<INotificador, Notificador>();
 
             return service;
         }
