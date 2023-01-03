@@ -18,19 +18,19 @@ namespace DevIO.Business.Services
         {
             if (!ExecutarValidacao(new ProdutoValidation(), produto)) return;
 
-            await _produtoRepository.Adicionar(produto);
+            await _produtoRepository.Add(produto);
         }
 
         public async Task Atualizar(Produto produto)
         {
             if (!ExecutarValidacao(new ProdutoValidation(), produto)) return;
 
-            await _produtoRepository.Atualizar(produto);
+            await _produtoRepository.Update(produto);
         }
 
         public async Task Remover(Guid id)
         {
-            await _produtoRepository.Remover(id);
+            await _produtoRepository.Remove(id);
         }
 
         public void Dispose()

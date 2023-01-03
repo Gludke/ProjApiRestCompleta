@@ -4,7 +4,7 @@ namespace DevIO.Business.Intefaces
 {
     public interface IFornecedorRepository : IRepository<Fornecedor>
     {
-        Task<Fornecedor> ObterFornecedorEndereco(Guid id);
-        Task<Fornecedor> ObterFornecedorProdutosEndereco(Guid id);
+        Task<Fornecedor> GetFornecedorEndereco(Guid id);
+        Task<Fornecedor> GetFornecedorProdutosEndereco(Guid id);
     }
 }

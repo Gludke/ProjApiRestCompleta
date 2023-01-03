@@ -17,45 +17,45 @@ namespace DevIO.Business.Services
             _enderecoRepository = enderecoRepository;
         }
 
-        public async Task<bool> Adicionar(Fornecedor fornecedor)
+        public async Task<bool> Add(Fornecedor fornecedor)
         {
             if (!ExecutarValidacao(new FornecedorValidation(), fornecedor) 
                 || !ExecutarValidacao(new EnderecoValidation(), fornecedor.Endereco)) return false;
 
-            if (_fornecedorRepository.Buscar(f => f.Documento == fornecedor.Documento).Result.Any())
+            if (_fornecedorRepository.Find(f => f.Documento == fornecedor.Documento).Result.Any())
             {
                 Notificar("Já existe um fornecedor com este documento informado.");
                 return false;
             }
 
-            await _fornecedorRepository.Adicionar(fornecedor);
+            await _fornecedorRepository.Add(fornecedor);
             return true;
         }
 
-        public async Task<bool> Atualizar(Fornecedor fornecedor)
+        public async Task<bool> Update(Fornecedor fornecedor)
         {
             if (!ExecutarValidacao(new FornecedorValidation(), fornecedor)) return false;
 
-            if (_fornecedorRepository.Buscar(f => f.Documento == fornecedor.Documento && f.Id != fornecedor.Id).Result.Any())
+            if (_fornecedorRepository.Find(f => f.Documento == fornecedor.Documento && f.Id != fornecedor.Id).Result.Any())
             {
                 Notificar("Já existe um fornecedor com este documento infomado.");
                 return false;
             }
 
-            await _fornecedorRepository.Atualizar(fornecedor);
+            await _fornecedorRepository.Update(fornecedor);
             return true;
         }
 
-        public async Task AtualizarEndereco(Endereco endereco)
+        public async Task UpdateAdress(Endereco endereco)
         {
             if (!ExecutarValidacao(new EnderecoValidation(), endereco)) return;
 
-            await _enderecoRepository.Atualizar(endereco);
+            await _enderecoRepository.Update(endereco);
         }
 
-        public async Task<bool> Remover(Guid id)
+        public async Task<bool> Remove(Guid id)
         {
-            if (_fornecedorRepository.ObterFornecedorProdutosEndereco(id).Result.Produtos.Any())
+            if (_fornecedorRepository.GetFornecedorProdutosEndereco(id).Result.Produtos.Any())
             {
                 Notificar("O fornecedor possui produtos cadastrados!");
                 return false;
@@ -65,10 +65,10 @@ namespace DevIO.Business.Services
 
             if (endereco != null)
             {
-                await _enderecoRepository.Remover(endereco.Id);
+                await _enderecoRepository.Remove(endereco.Id);
             }
 
-            await _fornecedorRepository.Remover(id);
+            await _fornecedorRepository.Remove(id);
             return true;
         }
 
