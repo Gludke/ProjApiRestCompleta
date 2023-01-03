@@ -1,6 +1,8 @@
-﻿using DevIO.Business.Intefaces;
+﻿using AutoMapper;
+using DevIO.Business.Intefaces;
 using Microsoft.AspNetCore.Mvc;
 using Proj.Api.ViewModels;
+using System.Collections.Generic;
 
 namespace Proj.Api.Controllers
 {
@@ -8,17 +10,19 @@ namespace Proj.Api.Controllers
     public class FornecedorController : MainController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
+        private readonly IMapper _mapper;
 
-        public FornecedorController(IFornecedorRepository fornecedorRepository)
+        public FornecedorController(IFornecedorRepository fornecedorRepository, IMapper mapper)
         {
             _fornecedorRepository = fornecedorRepository;
+            _mapper = mapper;
         }
 
         public async Task<ActionResult<IEnumerable<FornecedorViewModel>>> GetAll()
         {
+            var fornecedores = _mapper.Map<IEnumerable<FornecedorViewModel>>(await _fornecedorRepository.ObterTodos());
 
-
-            return Ok();
+            return Ok(fornecedores);
         }
     }
 }
