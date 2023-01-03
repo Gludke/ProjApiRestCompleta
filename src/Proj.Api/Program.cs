@@ -1,20 +1,21 @@
 using DevIO.Data.Context;
+using Microsoft.EntityFrameworkCore;
 using Proj.Api.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add Services
 
+builder.Services.AddDbContext<MeuDbContext>(opt =>
+{
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSwaggerGen();
 builder.Services.ResolveDependencies();
-
-builder.Services.AddDbContext<MeuDbContext>(options =>
-{
-
-});
 
 var app = builder.Build();
 
