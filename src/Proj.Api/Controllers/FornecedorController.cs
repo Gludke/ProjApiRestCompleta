@@ -41,15 +41,34 @@ namespace Proj.Api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<Fornecedor>> Register([FromBody] AddFornecedorViewModel viewModel)
         {
-            if(!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest();
 
-            var result = await _fornecedorService.Add(viewModel);
+            var fornecedor = CriarFornecedor(viewModel, _mapper);
 
-            if(!result) return BadRequest();
+            var result = await _fornecedorService.Add(fornecedor);
 
-            return Ok(fornecedorMapp);
+            if (!result) return BadRequest();
+
+            return Ok(fornecedor);
         }
 
 
+
+
+
+
+
+
+
+
+        private static Fornecedor CriarFornecedor(AddFornecedorViewModel viewModel, IMapper mapper)
+        {
+            var fornecedor = mapper.Map<Fornecedor>(viewModel);
+
+            fornecedor.Endereco.FornecedorId = fornecedor.Id;
+            foreach (var prod in fornecedor.Produtos) prod.FornecedorId = fornecedor.Id;
+
+            return fornecedor;
+        }
     }
 }

@@ -2,7 +2,6 @@
 using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
 using DevIO.Business.Models.Validations;
-using Proj.Api.ViewModels.Fornecedor;
 
 namespace DevIO.Business.Services
 {
@@ -20,7 +19,7 @@ namespace DevIO.Business.Services
             _enderecoRepository = enderecoRepository;
         }
 
-        public async Task<bool> Add(AddFornecedorViewModel fornecedor)
+        public async Task<bool> Add(Fornecedor fornecedor)
         {
             if (!ExecutarValidacao(new FornecedorValidation(), fornecedor) 
                 || !ExecutarValidacao(new EnderecoValidation(), fornecedor.Endereco)) return false;
@@ -30,8 +29,6 @@ namespace DevIO.Business.Services
                 Notificar("Já existe um fornecedor com este documento informado.");
                 return false;
             }
-
-            var fornecedorMapp = _mapper.Map<Fornecedor>(viewModel);
 
             await _fornecedorRepository.Add(fornecedor);
             return true;
