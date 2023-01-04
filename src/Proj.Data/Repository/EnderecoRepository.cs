@@ -15,9 +15,9 @@ namespace DevIO.Data.Repository
                 .FirstOrDefaultAsync(f => f.FornecedorId == fornecedorId);
         }
 
-        public async void RemoveByFornecedorId(Guid fornecedorId)
+        public void RemoveByFornecedorId(Guid fornecedorId)
         {
-            var adressDb = await DbSet.FirstOrDefaultAsync(e => e.FornecedorId == fornecedorId);
+            var adressDb = DbSet.FirstOrDefault(e => e.FornecedorId == fornecedorId);
 
             if(adressDb != null) DbSet.Remove(adressDb);
         }
