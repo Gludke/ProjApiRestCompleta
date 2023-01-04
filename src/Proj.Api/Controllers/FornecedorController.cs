@@ -63,10 +63,20 @@ namespace Proj.Api.Controllers
 
             if(!result) return BadRequest(); 
 
-            return Ok();
+            return Ok(fornecedor);
         }
 
+        [HttpDelete("delete/{id:guid}")]
+        public async Task<ActionResult<Fornecedor>> Delete([FromRoute] Guid id)
+        {
+            var fornecedor = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.GetFornecedorEndereco(id));
 
+            var result = await _fornecedorService.Remove(fornecedor.Id);
+
+            if (!result) return BadRequest();
+
+            return Ok(fornecedor);
+        }
 
         private static Fornecedor CreateFornecedor(AddFornecedorViewModel viewModel, IMapper mapper)
         {
