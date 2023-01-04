@@ -33,6 +33,8 @@ namespace DevIO.Business.Services
             }
 
             await _fornecedorRepository.Add(fornecedor);
+
+            await _fornecedorRepository.SaveChanges();
             return true;
         }
 
@@ -51,10 +53,13 @@ namespace DevIO.Business.Services
 
             _enderecoRepository.RemoveByFornecedorId(fornecedor.Id);
 
+            fornecedorDb.Update(fornecedor);
+
             await _fornecedorRepository.Update(fornecedorDb);
 
-            if(fornecedor.Endereco != null) await _enderecoRepository.Add(fornecedor.Endereco);
+            if(fornecedor.Endereco != null) await _enderecoRepository.Add(fornecedorDb.Endereco);
 
+            await _fornecedorRepository.SaveChanges();
             return true;
         }
 
@@ -63,6 +68,8 @@ namespace DevIO.Business.Services
             if (!ExecutarValidacao(new EnderecoValidation(), endereco)) return;
 
             await _enderecoRepository.Update(endereco);
+
+            await _fornecedorRepository.SaveChanges();
         }
 
         public async Task<bool> Remove(Guid id)
@@ -78,6 +85,8 @@ namespace DevIO.Business.Services
             if (endereco != null) await _enderecoRepository.Remove(endereco.Id);
 
             await _fornecedorRepository.Remove(id);
+
+            await _fornecedorRepository.SaveChanges();
             return true;
         }
 

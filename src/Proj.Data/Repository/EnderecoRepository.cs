@@ -19,7 +19,7 @@ namespace DevIO.Data.Repository
         {
             var adressDb = await DbSet.FirstOrDefaultAsync(e => e.FornecedorId == fornecedorId);
 
-            if(adressDb != null) DbSet.Remove(new Endereco { Id = adressDb.Id });
+            if(adressDb != null) DbSet.Remove(adressDb);
         }
     }
 }

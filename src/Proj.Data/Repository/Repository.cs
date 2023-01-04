@@ -35,13 +35,13 @@ namespace DevIO.Data.Repository
         public virtual async Task Add(TEntity entity)
         {
             DbSet.Add(entity);
-            await SaveChanges();
+            //await SaveChanges();
         }
 
         public virtual async Task Update(TEntity entity)
         {
             DbSet.Update(entity);
-            await SaveChanges();
+            //await SaveChanges();
         }
 
         public virtual async Task Remove(Guid id)
@@ -49,7 +49,7 @@ namespace DevIO.Data.Repository
             //o 'new()' nos permite criar a entidade genérica e atribuir o respectivo ID da busca, dessa forma remove-se o objeto
             //sem a necessidade de buscá-lo no BD
             DbSet.Remove(new TEntity { Id = id });
-            await SaveChanges();
+            //await SaveChanges();
         }
 
         public async Task<int> SaveChanges()

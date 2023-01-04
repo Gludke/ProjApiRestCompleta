@@ -57,22 +57,13 @@ namespace Proj.Api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var fornecedor = UpdateFornecedor(viewModel, _mapper);
+            var fornecedor = _mapper.Map<Fornecedor>(viewModel);
 
             var result = await _fornecedorService.Update(fornecedor);
 
             if(!result) return BadRequest(); 
 
             return Ok();
-        }
-
-
-
-        private static Fornecedor UpdateFornecedor(UpdateFornecedorViewModel viewModel, IMapper mapper)
-        {
-            var fornecedor = mapper.Map<Fornecedor>(viewModel);
-
-            return fornecedor;
         }
 
 
