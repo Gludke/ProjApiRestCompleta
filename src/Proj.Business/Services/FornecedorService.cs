@@ -9,14 +9,16 @@ namespace DevIO.Business.Services
     {
         private readonly IFornecedorRepository _fornecedorRepository;
         private readonly IEnderecoRepository _enderecoRepository;
+        private readonly IProdutoRepository _produtoRepository;
         private readonly IMapper _mapper;
 
-        public FornecedorService(IFornecedorRepository fornecedorRepository, 
+        public FornecedorService(IFornecedorRepository fornecedorRepository,
                                  IEnderecoRepository enderecoRepository,
-                                 INotificador notificador) : base(notificador)
+                                 INotificador notificador, IProdutoRepository produtoRepository) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
             _enderecoRepository = enderecoRepository;
+            _produtoRepository = produtoRepository;
         }
 
         public async Task<bool> Add(Fornecedor fornecedor)
@@ -38,18 +40,21 @@ namespace DevIO.Business.Services
         {
             //if (!ExecutarValidacao(new FornecedorValidation(), fornecedor)) return false;
 
+            var fornecedorDb = await _fornecedorRepository.GetById(fornecedor.Id);
+            if (fornecedorDb == null) return false;
+
             if (_fornecedorRepository.Find(f => f.Documento == fornecedor.Documento && f.Id != fornecedor.Id).Result.Any())
             {
                 Notificar("Já existe um fornecedor com este documento infomado.");
                 return false;
             }
 
-            var fornecedorDb = _fornecedorRepository.GetById(fornecedor.Id);
-            if(fornecedorDb == null) return false;
+            _enderecoRepository.RemoveByFornecedorId(fornecedor.Id);
 
+            await _fornecedorRepository.Update(fornecedorDb);
 
+            if(fornecedor.Endereco != null) await _enderecoRepository.Add(fornecedor.Endereco);
 
-            await _fornecedorRepository.Update(fornecedor);
             return true;
         }
 
@@ -68,12 +73,9 @@ namespace DevIO.Business.Services
                 return false;
             }
 
-            var endereco = await _enderecoRepository.ObterEnderecoPorFornecedor(id);
+            var endereco = await _enderecoRepository.GetAdressByFornecedorId(id);
 
-            if (endereco != null)
-            {
-                await _enderecoRepository.Remove(endereco.Id);
-            }
+            if (endereco != null) await _enderecoRepository.Remove(endereco.Id);
 
             await _fornecedorRepository.Remove(id);
             return true;

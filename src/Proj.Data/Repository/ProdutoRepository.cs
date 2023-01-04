@@ -25,5 +25,14 @@ namespace DevIO.Data.Repository
         {
             return await Find(p => p.FornecedorId == fornecedorId);
         }
+
+        public async void RemoveByFornecedorId(Guid fornecedorId)
+        {
+            var productsDb = await DbSet
+                .Where(p => p.FornecedorId == fornecedorId)
+                .ToListAsync();
+
+            if (productsDb.Any()) DbSet.RemoveRange(productsDb);
+        }
     }
 }

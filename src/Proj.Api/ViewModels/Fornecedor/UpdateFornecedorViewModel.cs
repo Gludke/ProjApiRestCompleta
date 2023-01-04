@@ -25,6 +25,6 @@ namespace Proj.Api.ViewModels.Fornecedor
 
         public bool Ativo { get; set; }
 
-        public IEnumerable<UpdateProdutoViewModel> Produtos { get; set; }
+        //public IEnumerable<UpdateProdutoViewModel> Produtos { get; set; }
     }
 }
