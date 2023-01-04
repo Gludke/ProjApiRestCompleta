@@ -43,7 +43,7 @@ namespace Proj.Api.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var fornecedor = CriarFornecedor(viewModel, _mapper);
+            var fornecedor = CreateFornecedor(viewModel, _mapper);
 
             var result = await _fornecedorService.Add(fornecedor);
 
@@ -52,16 +52,32 @@ namespace Proj.Api.Controllers
             return Ok(fornecedor);
         }
 
+        [HttpPut("update")]
+        public async Task<ActionResult<Fornecedor>> Update([FromBody] UpdateFornecedorViewModel viewModel)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            var fornecedor = UpdateFornecedor(viewModel, _mapper);
+
+            var result = await _fornecedorService.Update(fornecedor);
+
+            if(!result) return BadRequest(); 
+
+            return Ok();
+        }
 
 
 
+        private static Fornecedor UpdateFornecedor(UpdateFornecedorViewModel viewModel, IMapper mapper)
+        {
+            var fornecedor = mapper.Map<Fornecedor>(viewModel);
+
+            return fornecedor;
+        }
 
 
 
-
-
-
-        private static Fornecedor CriarFornecedor(AddFornecedorViewModel viewModel, IMapper mapper)
+        private static Fornecedor CreateFornecedor(AddFornecedorViewModel viewModel, IMapper mapper)
         {
             var fornecedor = mapper.Map<Fornecedor>(viewModel);
 
@@ -70,5 +86,7 @@ namespace Proj.Api.Controllers
 
             return fornecedor;
         }
+
+
     }
 }

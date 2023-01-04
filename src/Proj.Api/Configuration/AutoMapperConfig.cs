@@ -12,13 +12,16 @@ namespace Proj.Api.Configuration
         public AutoMapperConfig()
         {
             CreateMap<Fornecedor, AddFornecedorViewModel>().ReverseMap();
+            CreateMap<Fornecedor, UpdateFornecedorViewModel>().ReverseMap();
             CreateMap<Fornecedor, FornecedorViewModel>().ReverseMap();
 
             CreateMap<Endereco, EnderecoViewModel>().ReverseMap();
             CreateMap<Endereco, AddEnderecoViewModel>().ReverseMap();
+            CreateMap<Endereco, UpdateEnderecoViewModel>().ReverseMap();
 
             CreateMap<Produto, ProdutoViewModel>().ReverseMap();
             CreateMap<Produto, AddProdutoViewModel>().ReverseMap();
+            CreateMap<Produto, UpdateProdutoViewModel>().ReverseMap();
         }
     }
 }

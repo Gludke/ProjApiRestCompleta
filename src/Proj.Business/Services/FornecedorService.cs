@@ -36,13 +36,18 @@ namespace DevIO.Business.Services
 
         public async Task<bool> Update(Fornecedor fornecedor)
         {
-            if (!ExecutarValidacao(new FornecedorValidation(), fornecedor)) return false;
+            //if (!ExecutarValidacao(new FornecedorValidation(), fornecedor)) return false;
 
             if (_fornecedorRepository.Find(f => f.Documento == fornecedor.Documento && f.Id != fornecedor.Id).Result.Any())
             {
                 Notificar("Já existe um fornecedor com este documento infomado.");
                 return false;
             }
+
+            var fornecedorDb = _fornecedorRepository.GetById(fornecedor.Id);
+            if(fornecedorDb == null) return false;
+
+
 
             await _fornecedorRepository.Update(fornecedor);
             return true;

@@ -24,7 +24,7 @@ namespace DevIO.Data.Repository
 
         public virtual async Task<TEntity> GetById(Guid id)
         {
-            return await DbSet.FindAsync(id);
+            return await DbSet.FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public virtual async Task<List<TEntity>> GetAll()
