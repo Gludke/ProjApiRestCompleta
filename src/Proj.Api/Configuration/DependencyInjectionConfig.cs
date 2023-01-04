@@ -17,6 +17,7 @@ namespace Proj.Api.Configuration
             service.AddScoped<IProdutoRepository, ProdutoRepository>();
 
             service.AddScoped<IFornecedorService, FornecedorService>();
+            service.AddScoped<IProdutoService, ProdutoService>();
 
             service.AddScoped<INotificador, Notificador>();
 
