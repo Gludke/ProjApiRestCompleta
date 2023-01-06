@@ -2,6 +2,7 @@
 using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
 using Microsoft.AspNetCore.Mvc;
+using Proj.Api.ViewModels.Endereco;
 using Proj.Api.ViewModels.Fornecedor;
 
 namespace Proj.Api.Controllers
@@ -10,37 +11,47 @@ namespace Proj.Api.Controllers
     public class FornecedorController : MainController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
+        private readonly IEnderecoRepository _enderecoRepository;
         private readonly IFornecedorService _fornecedorService;
         private readonly IMapper _mapper;
 
         public FornecedorController(IFornecedorRepository fornecedorRepository, IMapper mapper, IFornecedorService fornecedorService,
-            INotificador notificador) : base(notificador)
+            INotificador notificador, IEnderecoRepository enderecoRepository) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
             _mapper = mapper;
             _fornecedorService = fornecedorService;
+            _enderecoRepository = enderecoRepository;
         }
 
-        [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<FornecedorViewModel>>> GetAll()
+        [HttpGet("get/all")]
+        public async Task<IActionResult> GetAll()
         {
             var fornecedores = _mapper.Map<IEnumerable<FornecedorViewModel>>(await _fornecedorRepository.GetAllFornecedorProdutosEndereco());
 
-            return Ok(fornecedores);
+            return CustomResponse(fornecedores);
         }
 
         [HttpGet("get/{id:guid}")]
-        public async Task<ActionResult<FornecedorViewModel>> GetUnique(Guid id)
+        public async Task<IActionResult> GetUnique(Guid id)
         {
             var fornecedor = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.GetFornecedorProdutosEndereco(id));
 
             if(fornecedor == null) return NotFound();
             
-            return Ok(fornecedor)
+            return CustomResponse(fornecedor)
 ;       }
 
+        [HttpGet("get/obterEndereco/{id:guid}")]
+        public async Task<ActionResult<EnderecoViewModel>> GetAdress(Guid id)
+        {
+            var adress = _mapper.Map<EnderecoViewModel>(await _enderecoRepository.GetById(id));
+
+            return CustomResponse(adress);
+        }
+
         [HttpPost("register")]
-        public async Task<ActionResult<Fornecedor>> Register([FromBody] AddFornecedorViewModel viewModel)
+        public async Task<IActionResult> Register([FromBody] AddFornecedorViewModel viewModel)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
@@ -50,7 +61,7 @@ namespace Proj.Api.Controllers
         }
 
         [HttpPut("update")]
-        public async Task<ActionResult<Fornecedor>> Update([FromBody] UpdateFornecedorViewModel viewModel)
+        public async Task<IActionResult> Update([FromBody] UpdateFornecedorViewModel viewModel)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
@@ -59,8 +70,18 @@ namespace Proj.Api.Controllers
             return CustomResponse(viewModel);
         }
 
+        [HttpPut("update/endereco/{id:guid}")]
+        public async Task<IActionResult> UpdateAdress([FromBody] UpdateEnderecoViewModel viewModel)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            await _fornecedorService.UpdateAdress(_mapper.Map<Endereco>(viewModel));
+
+            return CustomResponse(viewModel);
+        }
+
         [HttpDelete("delete/{id:guid}")]
-        public async Task<ActionResult<Fornecedor>> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var fornecedorDb = await _fornecedorRepository.GetFornecedorEndereco(id);
             if (fornecedorDb == null) return NotFound();

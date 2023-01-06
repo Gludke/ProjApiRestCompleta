@@ -8,6 +8,6 @@ namespace DevIO.Business.Intefaces
         Task<bool> Update(Fornecedor fornecedor);
         Task<bool> Remove(Guid id);
 
-        Task UpdateAdress(Endereco endereco);
+        Task<bool> UpdateAdress(Endereco endereco);
     }
 }

@@ -63,13 +63,14 @@ namespace DevIO.Business.Services
             return true;
         }
 
-        public async Task UpdateAdress(Endereco endereco)
+        public async Task<bool> UpdateAdress(Endereco endereco)
         {
-            if (!ExecutarValidacao(new EnderecoValidation(), endereco)) return;
+            if (!ExecutarValidacao(new EnderecoValidation(), endereco)) return false;
 
             await _enderecoRepository.Update(endereco);
 
             await _fornecedorRepository.SaveChanges();
+            return true;
         }
 
         public async Task<bool> Remove(Guid id)
