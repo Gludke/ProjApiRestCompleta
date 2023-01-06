@@ -15,8 +15,11 @@ namespace Proj.Api.Controllers
         private readonly IFornecedorService _fornecedorService;
         private readonly IMapper _mapper;
 
-        public FornecedorController(IFornecedorRepository fornecedorRepository, IMapper mapper, IFornecedorService fornecedorService,
-            INotificador notificador, IEnderecoRepository enderecoRepository) : base(notificador)
+        public FornecedorController(IFornecedorRepository fornecedorRepository,
+                                    IMapper mapper,
+                                    IFornecedorService fornecedorService,
+                                    INotificador notificador,
+                                    IEnderecoRepository enderecoRepository) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
             _mapper = mapper;
