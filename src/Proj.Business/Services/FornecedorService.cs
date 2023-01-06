@@ -43,7 +43,11 @@ namespace DevIO.Business.Services
             if (!ExecutarValidacao(new FornecedorValidation(), fornecedor)) return false;
 
             var fornecedorDb = await _fornecedorRepository.GetById(fornecedor.Id);
-            if (fornecedorDb == null) return false;
+            if (fornecedorDb == null)
+            {
+                Notificar("O fornecedor não existe");
+                return false;
+            };
 
             if (_fornecedorRepository.Find(f => f.Documento == fornecedor.Documento && f.Id != fornecedor.Id).Result.Any())
             {
@@ -67,7 +71,16 @@ namespace DevIO.Business.Services
         {
             if (!ExecutarValidacao(new EnderecoValidation(), endereco)) return false;
 
-            await _enderecoRepository.Update(endereco);
+            var enderecoDb = await _enderecoRepository.GetById(endereco.Id);
+            if (enderecoDb == null)
+            {
+                Notificar("O endereço não existe");
+                return false;
+            }
+
+            enderecoDb.Update(endereco);
+
+            await _enderecoRepository.Update(enderecoDb);
 
             await _fornecedorRepository.SaveChanges();
             return true;

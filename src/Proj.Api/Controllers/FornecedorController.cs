@@ -70,7 +70,7 @@ namespace Proj.Api.Controllers
             return CustomResponse(viewModel);
         }
 
-        [HttpPut("update/endereco/{id:guid}")]
+        [HttpPut("update/endereco")]
         public async Task<IActionResult> UpdateAdress([FromBody] UpdateEnderecoViewModel viewModel)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);

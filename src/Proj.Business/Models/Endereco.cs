@@ -13,5 +13,20 @@
 
         /* EF Relation */
         public Fornecedor Fornecedor { get; set; }
+
+
+
+
+
+        public void Update(Endereco endereco)
+        {
+            this.Logradouro = endereco.Logradouro;
+            this.Numero = endereco.Numero;
+            this.Complemento = endereco.Numero;
+            this.Cep = endereco.Cep;
+            this.Bairro = endereco.Bairro;
+            this.Cidade = endereco.Cidade;
+            this.Estado = endereco.Estado;
+        }
     }
 }
