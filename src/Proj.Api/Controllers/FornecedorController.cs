@@ -13,7 +13,8 @@ namespace Proj.Api.Controllers
         private readonly IFornecedorService _fornecedorService;
         private readonly IMapper _mapper;
 
-        public FornecedorController(IFornecedorRepository fornecedorRepository, IMapper mapper, IFornecedorService fornecedorService)
+        public FornecedorController(IFornecedorRepository fornecedorRepository, IMapper mapper, IFornecedorService fornecedorService,
+            INotificador notificador) : base(notificador)
         {
             _fornecedorRepository = fornecedorRepository;
             _mapper = mapper;
@@ -43,40 +44,34 @@ namespace Proj.Api.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var fornecedor = CreateFornecedor(viewModel, _mapper);
+            await _fornecedorService.Add(CreateFornecedor(viewModel, _mapper));
 
-            var result = await _fornecedorService.Add(fornecedor);
-
-            if (!result) return BadRequest();
-
-            return Ok(fornecedor);
+            return CustomResponse(viewModel);
         }
 
         [HttpPut("update")]
         public async Task<ActionResult<Fornecedor>> Update([FromBody] UpdateFornecedorViewModel viewModel)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var fornecedor = _mapper.Map<Fornecedor>(viewModel);
+            await _fornecedorService.Update(_mapper.Map<Fornecedor>(viewModel));
 
-            var result = await _fornecedorService.Update(fornecedor);
-
-            if(!result) return BadRequest(); 
-
-            return Ok(fornecedor);
+            return CustomResponse(viewModel);
         }
 
         [HttpDelete("delete/{id:guid}")]
         public async Task<ActionResult<Fornecedor>> Delete([FromRoute] Guid id)
         {
-            var fornecedor = _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.GetFornecedorEndereco(id));
+            var fornecedorDb = await _fornecedorRepository.GetFornecedorEndereco(id);
+            if (fornecedorDb == null) return NotFound();
 
-            var result = await _fornecedorService.Remove(fornecedor.Id);
+            await _fornecedorService.Remove(fornecedorDb.Id);
 
-            if (!result) return BadRequest();
-
-            return Ok(fornecedor);
+            return CustomResponse();
         }
+
+
+        #region METHODS
 
         private static Fornecedor CreateFornecedor(AddFornecedorViewModel viewModel, IMapper mapper)
         {
@@ -87,6 +82,8 @@ namespace Proj.Api.Controllers
 
             return fornecedor;
         }
+
+        #endregion
 
 
     }
