@@ -41,7 +41,7 @@ namespace Proj.Api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<Fornecedor>> Register([FromBody] AddFornecedorViewModel viewModel)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var fornecedor = CreateFornecedor(viewModel, _mapper);
 

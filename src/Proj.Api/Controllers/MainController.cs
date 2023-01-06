@@ -1,4 +1,5 @@
 ﻿using DevIO.Business.Intefaces;
+using DevIO.Business.Notificacoes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
@@ -14,12 +15,42 @@ namespace Proj.Api.Controllers
             _notificador = notificador;
         }
 
+        protected bool OperationValid()
+        {
+            return !_notificador.TemNotificacao();
+        }
+
         /// <summary>
-        /// Método que vai retornar todos os nossos erros de forma padronizada
+        /// Resposta final da chamada de uma rota
+        /// </summary>
+        protected ActionResult CustomResponse(object result = null)
+        {
+            if (OperationValid())
+            {
+                return Ok(new
+                {
+                    success = true,
+                    data = result
+                });
+            }
+
+            return BadRequest(new
+            {
+                success = false,
+                errors = _notificador.ObterNotificacoes().Select(n => n.Mensagem)
+            }); ;
+        }
+
+        /// <summary>
+        /// Método que vai retornar todos os nossos ERROS de forma padronizada
         /// </summary>
         protected ActionResult CustomResponse(ModelStateDictionary modelState)
         {
+            //'ModelStateDictionary' é o objeto que armazena os erros de modelo gerados pelo próprio sistema, não pela
+            //camada de negócios.
+            if (!modelState.IsValid) NotifyErrorModelInvalid(modelState);
 
+            return CustomResponse();
         }
 
         /// <summary>
@@ -37,7 +68,7 @@ namespace Proj.Api.Controllers
 
         protected void NotifyError(string msg)
         {
-
+            _notificador.Handle(new Notificacao(msg));
         }
 
     }
