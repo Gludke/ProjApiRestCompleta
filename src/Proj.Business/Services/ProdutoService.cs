@@ -14,21 +14,21 @@ namespace DevIO.Business.Services
             _produtoRepository = produtoRepository;
         }
 
-        public async Task Adicionar(Produto produto)
+        public async Task Add(Produto produto)
         {
             if (!ExecutarValidacao(new ProdutoValidation(), produto)) return;
 
             await _produtoRepository.Add(produto);
         }
 
-        public async Task Atualizar(Produto produto)
+        public async Task Update(Produto produto)
         {
             if (!ExecutarValidacao(new ProdutoValidation(), produto)) return;
 
             await _produtoRepository.Update(produto);
         }
 
-        public async Task Remover(Guid id)
+        public async Task Remove(Guid id)
         {
             await _produtoRepository.Remove(id);
         }
@@ -37,5 +37,6 @@ namespace DevIO.Business.Services
         {
             _produtoRepository?.Dispose();
         }
+
     }
 }

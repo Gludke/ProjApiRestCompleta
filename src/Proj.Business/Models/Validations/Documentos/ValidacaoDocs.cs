@@ -1,4 +1,6 @@
-﻿namespace DevIO.Business.Models.Validations.Documentos
+﻿using Proj.Business.Utils;
+
+namespace DevIO.Business.Models.Validations.Documentos
 {
     public class CpfValidacao
     {
@@ -158,19 +160,4 @@
         }
     }
 
-    public class Utils
-    {
-        public static string ApenasNumeros(string valor)
-        {
-            var onlyNumber = "";
-            foreach (var s in valor)
-            {
-                if (char.IsDigit(s))
-                {
-                    onlyNumber += s;
-                }
-            }
-            return onlyNumber.Trim();
-        }
-    }
 }

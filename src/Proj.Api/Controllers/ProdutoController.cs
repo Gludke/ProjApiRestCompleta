@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using DevIO.Business.Intefaces;
+using DevIO.Business.Models;
 using Microsoft.AspNetCore.Mvc;
 using Proj.Api.ViewModels.Produto;
+using Proj.Business.Utils;
 
 namespace Proj.Api.Controllers
 {
@@ -39,7 +41,36 @@ namespace Proj.Api.Controllers
             return CustomResponse(produto);
         }
 
-        
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] ProdutoViewModel viewModel)
+        {
+            if(!ModelState.IsValid) return CustomResponse(ModelState);
+
+            //Trata a imagem enviada
+            if (!String.IsNullOrEmpty(viewModel.ImagemUpload) && !String.IsNullOrEmpty(viewModel.Imagem))
+            {
+                viewModel.Imagem = $"{viewModel.Imagem}_{DateTime.Now}";   
+                
+                Utils.UploadDocBase64(viewModel.ImagemUpload, viewModel.Imagem);
+            }
+
+            await _produtoService.Add(_mapper.Map<Produto>(viewModel));
+
+            return CustomResponse();
+        }
+
+        [HttpDelete("delete/{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var prod = await _produtoRepository.GetById(id);
+            if (prod == null) NotifyError("O produto não existe");
+
+            await _produtoService.Remove(id);
+
+            return CustomResponse(prod);
+        }
+
+
 
     }
 }
