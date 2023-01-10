@@ -42,7 +42,7 @@ namespace Proj.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] ProdutoViewModel viewModel)
+        public async Task<IActionResult> Register([FromBody] AddProdutoViewModel viewModel)
         {
             if(!ModelState.IsValid) return CustomResponse(ModelState);
 
@@ -56,7 +56,7 @@ namespace Proj.Api.Controllers
 
             await _produtoService.Add(_mapper.Map<Produto>(viewModel));
 
-            return CustomResponse();
+            return CustomResponse(viewModel);
         }
 
         [HttpDelete("delete/{id:guid}")]
