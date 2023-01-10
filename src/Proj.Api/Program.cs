@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add Services
+// ########## Add Services ##########
 
 builder.Services.AddDbContext<MeuDbContext>(opt =>
 {
@@ -23,6 +23,28 @@ builder.Services.Configure<ApiBehaviorOptions>(opt =>
     opt.SuppressModelStateInvalidFilter = true;
 });
 
+//Políticas de acesso à API
+builder.Services.AddCors(options =>
+{
+    //Políticas de nome 'Development': acesso total atribuído nessas políticas
+    options.AddPolicy("Development",
+        builder =>
+            builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
+
+    //options.AddPolicy("Production",
+    //    builder =>
+    //        builder
+    //            .WithMethods("GET")
+    //            .WithOrigins("http://desenvolvedor.io")
+    //            .SetIsOriginAllowedToAllowWildcardSubdomains()
+    //            //.WithHeaders(HeaderNames.ContentType, "x-custom-header")
+    //            .AllowAnyHeader());
+});
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -35,13 +57,16 @@ var app = builder.Build();
 
 
 
-// Configure Services
+// ########## Configure Services ##########
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//Usando a política de acesso 'Development' configurada acima
+app.UseCors("Development");
 
 app.UseHttpsRedirection();
 
