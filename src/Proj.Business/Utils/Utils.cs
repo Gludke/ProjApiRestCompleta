@@ -9,8 +9,6 @@ namespace Proj.Business.Utils
         {
             try
             {
-                CheckExistsBaseDirectory();
-
                 var docByte = Convert.FromBase64String(docBase64);
 
                 var filePath = Path.Combine(GetBaseDirectory(), docName);
@@ -26,10 +24,6 @@ namespace Proj.Business.Utils
             {
                 throw;
             }
-        }
-
-        private static void CheckExistsBaseDirectory()
-        {
         }
 
         public static string ApenasNumeros(string valor)

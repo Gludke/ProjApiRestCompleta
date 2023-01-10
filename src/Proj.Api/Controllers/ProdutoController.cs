@@ -49,7 +49,7 @@ namespace Proj.Api.Controllers
             //Trata a imagem enviada
             if (!String.IsNullOrEmpty(viewModel.ImagemUpload) && !String.IsNullOrEmpty(viewModel.Imagem))
             {
-                viewModel.Imagem = $"{viewModel.Imagem}_{DateTime.Now}.{Path.GetExtension(viewModel.Imagem)}";
+                viewModel.Imagem = $"{viewModel.Imagem}_{Guid.NewGuid()}{Path.GetExtension(viewModel.Imagem)}";
                 
                 Utils.UploadDocBase64(viewModel.ImagemUpload, viewModel.Imagem);
             }
