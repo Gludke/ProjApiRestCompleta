@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Proj.Data\Proj.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

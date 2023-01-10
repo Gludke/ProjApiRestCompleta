@@ -3,12 +3,14 @@ namespace Proj.Business.Utils
 {
     public class Utils 
     {
-        private static readonly string _baseDirectory = $"{Directory.GetCurrentDirectory()}/{"TempDocuments"}";
+        private static readonly string _baseDirectory = $"{Directory.GetCurrentDirectory()}/{"wwwroot"}";
 
         public static void UploadDocBase64(string docBase64, string docName)
         {
             try
             {
+                CheckExistsBaseDirectory();
+
                 var docByte = Convert.FromBase64String(docBase64);
 
                 var filePath = Path.Combine(GetBaseDirectory(), docName);
@@ -26,6 +28,10 @@ namespace Proj.Business.Utils
             }
         }
 
+        private static void CheckExistsBaseDirectory()
+        {
+        }
+
         public static string ApenasNumeros(string valor)
         {
             var onlyNumber = "";
@@ -39,22 +45,9 @@ namespace Proj.Business.Utils
             return onlyNumber.Trim();
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         public static string GetBaseDirectory()
         {
-            if (!System.IO.File.Exists(_baseDirectory)) File.Create(_baseDirectory);
+            if (!Directory.Exists(_baseDirectory)) Directory.CreateDirectory(_baseDirectory);
 
             return _baseDirectory;
         }
