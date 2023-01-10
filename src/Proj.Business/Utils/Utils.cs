@@ -3,7 +3,7 @@ namespace Proj.Business.Utils
 {
     public class Utils 
     {
-        private static readonly string _baseDirectory = $"{Directory.GetCurrentDirectory()}/{"wwwroot"}";
+        private static readonly string _baseDirectory = $"{Directory.GetCurrentDirectory()}/{"TempDocuments"}";
 
         public static void UploadDocBase64(string docBase64, string docName)
         {
