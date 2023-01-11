@@ -19,9 +19,15 @@ namespace Proj.Api.Configuration
             CreateMap<Endereco, AddEnderecoViewModel>().ReverseMap();
             CreateMap<Endereco, UpdateEnderecoViewModel>().ReverseMap();
 
-            CreateMap<Produto, ProdutoViewModel>().ReverseMap();
             CreateMap<Produto, AddProdutoViewModel>().ReverseMap();
             CreateMap<Produto, UpdateProdutoViewModel>().ReverseMap();
+            CreateMap<ProdutoViewModel, Produto>();
+            CreateMap<Produto, ProdutoViewModel>()//pegando o nome do 'Fornecedor' e mapeando dentro da var de 'ProdutoViewModel'
+                .ForMember(dest => dest.NomeFornecedor, opt => opt.MapFrom(prod => prod.Fornecedor.Nome));
+            CreateMap<Produto, AddProdutoImageViewModel>().ReverseMap();
+
+
+
         }
     }
 }
