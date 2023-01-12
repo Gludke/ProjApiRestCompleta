@@ -68,7 +68,7 @@ namespace Proj.Api.Controllers
             var produto = _mapper.Map<Produto>(viewModel);
 
             //Trata a imagem enviada
-            if (viewModel.ImagemUpload != null)
+            if (viewModel.ImagemUpload != null && viewModel.ImagemUpload.Length > 0)
             {
                 var imgName = $"{viewModel.ImagemUpload.FileName}_{Guid.NewGuid()}{Path.GetExtension(viewModel.ImagemUpload.FileName)}";
                 produto.Imagem = imgName;
@@ -101,6 +101,19 @@ namespace Proj.Api.Controllers
 
             return CustomResponse(viewModel);
         }
+
+        [HttpPut("update")]
+        public async Task<IActionResult> Update([FromForm] UpdateProdutoViewModel viewModel)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var imgProd = viewModel.ImagemUpload != null && viewModel.ImagemUpload.Length > 0 ? viewModel.ImagemUpload : null;
+            await _produtoService.Update(_mapper.Map<Produto>(viewModel), imgProd);
+
+            return CustomResponse(viewModel);
+        }
+
+
 
         [HttpDelete("delete/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)

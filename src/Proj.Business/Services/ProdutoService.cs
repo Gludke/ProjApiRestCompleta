@@ -1,6 +1,8 @@
 ﻿using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
 using DevIO.Business.Models.Validations;
+using Microsoft.AspNetCore.Http;
+using Proj.Business.Utils;
 
 namespace DevIO.Business.Services
 {
@@ -32,11 +34,31 @@ namespace DevIO.Business.Services
             await _produtoRepository.SaveChanges();
         }
 
-        public async Task Update(Produto produto)
+        public async Task Update(Produto produto, IFormFile imgProduto)
         {
             if (!ExecutarValidacao(new ProdutoValidation(), produto)) return;
 
-            await _produtoRepository.Update(produto);
+            var produtoDb = await _produtoRepository.GetById(produto.Id);
+            if(produtoDb == null)
+            {
+                Notificar("O produto não existe");
+                return;
+            }
+
+            //Se há nova imagem, remover a antiga e salvar a nova
+            if (imgProduto != null)
+            {
+                var nameNewDoc = $"{imgProduto.FileName}_{Guid.NewGuid()}{Path.GetExtension(imgProduto.FileName)}";
+
+                Utils.DeleteDocument(produtoDb.Imagem);
+
+                Utils.UploadDocStream(imgProduto.OpenReadStream(), nameNewDoc);
+                produtoDb.Imagem = nameNewDoc;
+            }
+
+            produtoDb.Update(produto);
+
+            await _produtoRepository.Update(produtoDb);
             await _produtoRepository.SaveChanges();
         }
 

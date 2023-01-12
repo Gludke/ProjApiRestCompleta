@@ -13,5 +13,18 @@
 
         /* EF Relations */
         public Fornecedor Fornecedor { get; set; }
+
+        public void Update(Produto produto)
+        {
+            this.Nome = produto.Nome;
+            this.Descricao = produto.Descricao;
+            this.Valor = produto.Valor;
+            this.Ativo = produto.Ativo;
+        }
+
+
+
+
+
     }
 }

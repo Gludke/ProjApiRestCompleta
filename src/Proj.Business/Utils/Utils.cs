@@ -47,6 +47,22 @@ namespace Proj.Business.Utils
             }
         }
 
+        public static void DeleteDocument(string docName)
+        {
+            try
+            {
+                var docPath = Path.Combine(GetBaseDirectory(), docName);
+
+                if (File.Exists(docPath)) File.Delete(docPath);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
         public static string ApenasNumeros(string valor)
         {
             var onlyNumber = "";
@@ -80,8 +96,6 @@ namespace Proj.Business.Utils
                 return ms.ToArray();
             }
         }
-
-
 
     }
 }

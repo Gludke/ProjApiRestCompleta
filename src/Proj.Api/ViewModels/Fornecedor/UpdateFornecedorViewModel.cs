@@ -24,7 +24,5 @@ namespace Proj.Api.ViewModels.Fornecedor
         public UpdateEnderecoViewModel Endereco { get; set; }
 
         public bool Ativo { get; set; }
-
-        //public IEnumerable<UpdateProdutoViewModel> Produtos { get; set; }
     }
 }
