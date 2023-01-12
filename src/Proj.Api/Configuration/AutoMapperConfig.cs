@@ -20,6 +20,7 @@ namespace Proj.Api.Configuration
             CreateMap<Endereco, UpdateEnderecoViewModel>().ReverseMap();
 
             CreateMap<Produto, AddProdutoViewModel>().ReverseMap();
+            CreateMap<Produto, AddProdutoModelBinderImageViewModel>().ReverseMap();
             CreateMap<Produto, UpdateProdutoViewModel>().ReverseMap();
             CreateMap<ProdutoViewModel, Produto>();
             CreateMap<Produto, ProdutoViewModel>()//pegando o nome do 'Fornecedor' e mapeando dentro da var de 'ProdutoViewModel'

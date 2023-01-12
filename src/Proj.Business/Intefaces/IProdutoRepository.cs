@@ -8,5 +8,6 @@ namespace DevIO.Business.Intefaces
         Task<IEnumerable<Produto>> ObterProdutosFornecedores();
         Task<Produto> ObterProdutoFornecedor(Guid id);
         void RemoveByFornecedorId(Guid fornecedorId);
+        void Remove(Produto prod);
     }
 }

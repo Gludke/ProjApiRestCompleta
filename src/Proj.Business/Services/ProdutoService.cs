@@ -42,7 +42,14 @@ namespace DevIO.Business.Services
 
         public async Task Remove(Guid id)
         {
-            await _produtoRepository.Remove(id);
+            var prod = await _produtoRepository.GetById(id);
+            if (prod == null)
+            {
+                Notificar("O produto não existe");
+                return;
+            }
+
+            _produtoRepository.Remove(prod);
             await _produtoRepository.SaveChanges();
         }
 

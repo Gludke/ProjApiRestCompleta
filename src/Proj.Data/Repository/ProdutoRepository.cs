@@ -27,6 +27,11 @@ namespace DevIO.Data.Repository
             return await Find(p => p.FornecedorId == fornecedorId);
         }
 
+        public void Remove(Produto prod)
+        {
+            DbSet.Remove(prod);
+        }
+
         public void RemoveByFornecedorId(Guid fornecedorId)
         {
             var productsDb = DbSet

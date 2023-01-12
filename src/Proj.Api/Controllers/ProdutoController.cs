@@ -81,9 +81,6 @@ namespace Proj.Api.Controllers
             return CustomResponse(viewModel);
         }
 
-
-
-
         [HttpPost("registerWithModelBinder")]
         public async Task<IActionResult> RegisterUsandoModelBinder(AddProdutoModelBinderImageViewModel viewModel)
         {
@@ -105,17 +102,12 @@ namespace Proj.Api.Controllers
             return CustomResponse(viewModel);
         }
 
-
-
         [HttpDelete("delete/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var prod = await _produtoRepository.GetById(id);
-            if (prod == null) NotifyError("O produto não existe");
-
             await _produtoService.Remove(id);
 
-            return CustomResponse(prod);
+            return CustomResponse();
         }
 
 
