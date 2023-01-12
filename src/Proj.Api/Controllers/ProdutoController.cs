@@ -59,8 +59,33 @@ namespace Proj.Api.Controllers
             return CustomResponse(viewModel);
         }
 
+        [RequestSizeLimit(40000000)] //Envio de doc limitado em 40MB
         [HttpPost("registerFromForm")]
-        public async Task<IActionResult> Register([FromForm] AddProdutoImageViewModel viewModel)
+        public async Task<IActionResult> RegisterFromForm([FromForm] AddProdutoImageViewModel viewModel)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var produto = _mapper.Map<Produto>(viewModel);
+
+            //Trata a imagem enviada
+            if (viewModel.ImagemUpload != null)
+            {
+                var imgName = $"{viewModel.ImagemUpload.FileName}_{Guid.NewGuid()}{Path.GetExtension(viewModel.ImagemUpload.FileName)}";
+                produto.Imagem = imgName;
+
+                Utils.UploadDocStream(viewModel.ImagemUpload.OpenReadStream(), imgName);
+            }
+
+            await _produtoService.Add(produto);
+
+            return CustomResponse(viewModel);
+        }
+
+
+
+
+        [HttpPost("registerWithModelBinder")]
+        public async Task<IActionResult> RegisterUsandoModelBinder(AddProdutoModelBinderImageViewModel viewModel)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
