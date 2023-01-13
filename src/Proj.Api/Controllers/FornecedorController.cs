@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Proj.Api.ViewModels.Endereco;
 using Proj.Api.ViewModels.Fornecedor;
 
 namespace Proj.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class FornecedorController : MainController
     {
@@ -27,6 +29,8 @@ namespace Proj.Api.Controllers
             _enderecoRepository = enderecoRepository;
         }
 
+
+        [AllowAnonymous]//Permite o acesso da rota sem estar logado
         [HttpGet("get/all")]
         public async Task<IActionResult> GetAll()
         {
