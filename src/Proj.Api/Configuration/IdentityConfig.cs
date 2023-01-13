@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Proj.Api.Data;
 
 namespace Proj.Api.Configuration
@@ -12,7 +13,9 @@ namespace Proj.Api.Configuration
             services.AddDbContext<AplicationDbContext>(opt =>
                 opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-
+            //Adicionando o serviço do Identity
+            //Pode ser necessário o package 'Microsoft.AspNetCore.Identity.UI'
+            services.AddDefaultIdentity<IdentityUser>();
 
 
 
