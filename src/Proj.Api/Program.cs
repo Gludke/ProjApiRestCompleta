@@ -11,6 +11,8 @@ builder.Services.AddDbContext<MeuDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddIdentityConfig(builder.Configuration);//Extensão criada para configurar a autenticação
+
 builder.Services.AddApiConfig();//Extensão criada para compactar os códigos
 
 builder.Services.AddEndpointsApiExplorer();
