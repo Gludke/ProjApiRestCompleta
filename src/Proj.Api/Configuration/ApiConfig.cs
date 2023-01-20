@@ -46,6 +46,7 @@ namespace Proj.Api.Configuration
         {
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             //Usando a política de acesso 'Development' configurada acima

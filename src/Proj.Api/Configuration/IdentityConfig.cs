@@ -15,8 +15,14 @@ namespace Proj.Api.Configuration
 
             //Adicionando o serviço do Identity
             //Pode ser necessário o package 'Microsoft.AspNetCore.Identity.UI'
-            services.AddDefaultIdentity<IdentityUser>();
-
+            //É possível adicionar qualquer classe que extenda as interfaces corretas no lugar dessas classes genéricas do Identity
+            services.AddDefaultIdentity<IdentityUser>()
+                //tabela de claims dos users
+                .AddRoles<IdentityRole>()
+                //define o uso do EF Core                                           
+                .AddEntityFrameworkStores<AplicationDbContext>()
+                //Recurso que gera tokens, mas não é necessário
+                .AddDefaultTokenProviders();
 
 
 
