@@ -46,8 +46,8 @@ namespace Proj.Api.Controllers
 
             if(fornecedor == null) return NotFound();
             
-            return CustomResponse(fornecedor)
-;       }
+            return CustomResponse(fornecedor);
+        }
 
         [HttpGet("get/obterEndereco/{id:guid}")]
         public async Task<ActionResult<EnderecoViewModel>> GetAdress(Guid id)

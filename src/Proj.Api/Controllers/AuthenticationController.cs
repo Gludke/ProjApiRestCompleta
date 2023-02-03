@@ -22,6 +22,7 @@ namespace Proj.Api.Controllers
             _userInManager = userInManager;
         }
 
+        [HttpPost("nova")]
         public async Task<IActionResult> Register(RegisterUserViewModel viewModel)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -33,11 +34,44 @@ namespace Proj.Api.Controllers
                 EmailConfirmed = true,
             };
 
-            //pass passado à parte porque o identity gera criptografia
+            //'pass' passado à parte porque o identity gera criptografia
             var result = await _userInManager.CreateAsync(user, viewModel.Password);
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return CustomResponse(viewModel);
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    NotifyError(error.Description);
+                }
+            }
 
+            return CustomResponse(viewModel);
+        }
 
-            return CustomResponse();
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginUserViewModel viewModel)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            //'true' - bloqueia o login do user em caso de 5 erros por alguns minutos
+            var result = await _signInManager.PasswordSignInAsync(viewModel.Email, viewModel.Password, false, true);
+            if (result.Succeeded)
+            {
+                return CustomResponse(viewModel);
+            }
+            if (result.IsLockedOut)//user bloqueado por tentativas
+            {
+                NotifyError("Usuário temporiariamente bloqueado por tentativas inválidas");
+                return CustomResponse(viewModel);
+            }
+            
+            NotifyError("Usuário ou senha incorretos");
+
+            return CustomResponse(viewModel);
         }
 
 
