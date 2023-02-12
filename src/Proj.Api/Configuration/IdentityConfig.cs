@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Proj.Api.Data;
+using Proj.Api.Extensions;
 
 namespace Proj.Api.Configuration
 {
@@ -21,6 +22,8 @@ namespace Proj.Api.Configuration
                 .AddRoles<IdentityRole>()
                 //define o uso do EF Core                                           
                 .AddEntityFrameworkStores<AplicationDbContext>()
+                //Classe com novas msgs de erros
+                .AddErrorDescriber<IdentityMsgsPtBr>()
                 //Recurso que gera tokens, mas não é necessário
                 .AddDefaultTokenProviders();
 
