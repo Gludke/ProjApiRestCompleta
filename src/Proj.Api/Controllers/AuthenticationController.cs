@@ -1,7 +1,13 @@
 ﻿using DevIO.Business.Intefaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Proj.Api.Extensions;
 using Proj.Api.ViewModels.User;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace Proj.Api.Controllers
 {
@@ -12,14 +18,17 @@ namespace Proj.Api.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         //Classe do Identity - necessária para manipular o user (register, etc)
         private readonly UserManager<IdentityUser> _userInManager;
+        private readonly AppSettings _appSettings;
 
 
-        public AuthenticationController(INotificador notificador, 
-            SignInManager<IdentityUser> signInManager, 
-            UserManager<IdentityUser> userInManager) : base(notificador)
+        public AuthenticationController(INotificador notificador,
+            SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userInManager,
+            IOptions<AppSettings> appSettings) : base(notificador)
         {
             _signInManager = signInManager;
             _userInManager = userInManager;
+            _appSettings = appSettings.Value;
         }
 
         [HttpPost("nova")]
@@ -39,7 +48,7 @@ namespace Proj.Api.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return CustomResponse(viewModel);
+                return CustomResponse(GerarJwt());
             }
             else
             {
@@ -61,7 +70,7 @@ namespace Proj.Api.Controllers
             var result = await _signInManager.PasswordSignInAsync(viewModel.Email, viewModel.Password, false, true);
             if (result.Succeeded)
             {
-                return CustomResponse(viewModel);
+                return CustomResponse(GerarJwt());
             }
             if (result.IsLockedOut)//user bloqueado por tentativas
             {
@@ -74,6 +83,35 @@ namespace Proj.Api.Controllers
             return CustomResponse(viewModel);
         }
 
+
+
+
+        #region OTHER METHODS
+
+        private string GerarJwt()
+        {
+            //obj que manipula o JwtToken
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            //criando a chave criptografada em ASCII
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            //criando o token em ASCII
+            var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
+            {
+                Issuer = _appSettings.Emissor,
+                Audience = _appSettings.ValidoEm,
+                //sempre UTC para n bugar caso o user esteja em outro lugar 
+                Expires = DateTime.UtcNow.AddHours(_appSettings.ExpiracaoHoras),
+                //credenciais de acesso
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            });
+
+            //serializando o token em JWT para web
+            var encodedToken = tokenHandler.WriteToken(token);
+            return encodedToken;
+        }
+
+        #endregion
 
     }
 }
