@@ -15,15 +15,15 @@ namespace DevIO.Business.Services
             _notificador = notificador;
         }
 
-        protected void Notificar(ValidationResult validationResult)
+        protected void NotifyError(ValidationResult validationResult)
         {
             foreach (var error in validationResult.Errors)
             {
-                Notificar(error.ErrorMessage);
+                NotifyError(error.ErrorMessage);
             }
         }
 
-        protected void Notificar(string mensagem)
+        protected void NotifyError(string mensagem)
         {
             _notificador.Handle(new Notificacao(mensagem));
         }
@@ -34,7 +34,7 @@ namespace DevIO.Business.Services
 
             if(validator.IsValid) return true;
 
-            Notificar(validator);
+            NotifyError(validator);
 
             return false;
         }

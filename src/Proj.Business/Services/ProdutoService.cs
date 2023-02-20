@@ -26,7 +26,7 @@ namespace DevIO.Business.Services
             var fornecedorDb = await _fornecedorRepository.GetById(produto.FornecedorId);
             if (fornecedorDb == null)
             {
-                Notificar("O fornecedor não existe");
+                NotifyError("O fornecedor não existe");
                 return;
             };
 
@@ -41,7 +41,7 @@ namespace DevIO.Business.Services
             var produtoDb = await _produtoRepository.GetById(produto.Id);
             if(produtoDb == null)
             {
-                Notificar("O produto não existe");
+                NotifyError("O produto não existe");
                 return;
             }
 
@@ -67,7 +67,7 @@ namespace DevIO.Business.Services
             var prod = await _produtoRepository.GetById(id);
             if (prod == null)
             {
-                Notificar("O produto não existe");
+                NotifyError("O produto não existe");
                 return;
             }
 

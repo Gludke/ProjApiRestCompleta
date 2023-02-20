@@ -18,6 +18,7 @@ namespace Proj.Api.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         //Classe do Identity - necessária para manipular o user (register, etc)
         private readonly UserManager<IdentityUser> _userInManager;
+        //Classe criada contendo as configs do JWT
         private readonly AppSettings _appSettings;
 
 

@@ -28,7 +28,7 @@ namespace DevIO.Business.Services
 
             if (_fornecedorRepository.Find(f => f.Documento == fornecedor.Documento).Result.Any())
             {
-                Notificar("Já existe um fornecedor com este documento informado.");
+                NotifyError("Já existe um fornecedor com este documento informado.");
                 return false;
             }
 
@@ -45,13 +45,13 @@ namespace DevIO.Business.Services
             var fornecedorDb = await _fornecedorRepository.GetById(fornecedor.Id);
             if (fornecedorDb == null)
             {
-                Notificar("O fornecedor não existe");
+                NotifyError("O fornecedor não existe");
                 return false;
             };
 
             if (_fornecedorRepository.Find(f => f.Documento == fornecedor.Documento && f.Id != fornecedor.Id).Result.Any())
             {
-                Notificar("Já existe um fornecedor com este documento infomado.");
+                NotifyError("Já existe um fornecedor com este documento infomado.");
                 return false;
             }
 
@@ -74,7 +74,7 @@ namespace DevIO.Business.Services
             var enderecoDb = await _enderecoRepository.GetById(endereco.Id);
             if (enderecoDb == null)
             {
-                Notificar("O endereço não existe");
+                NotifyError("O endereço não existe");
                 return false;
             }
 
@@ -90,7 +90,7 @@ namespace DevIO.Business.Services
         {
             if (_fornecedorRepository.GetFornecedorProdutosEndereco(id).Result.Produtos.Any())
             {
-                Notificar("O fornecedor possui produtos cadastrados!");
+                NotifyError("O fornecedor possui produtos cadastrados!");
                 return false;
             }
 
