@@ -70,9 +70,8 @@ namespace Proj.Api.Controllers
             //'true' - bloqueia o login do user em caso de 5 erros por alguns minutos
             var result = await _signInManager.PasswordSignInAsync(viewModel.Email, viewModel.Password, false, true);
             if (result.Succeeded)
-            {
                 return CustomResponse(GerarJwt());
-            }
+            
             if (result.IsLockedOut)//user bloqueado por tentativas
             {
                 NotifyError("Usuário temporiariamente bloqueado por tentativas inválidas");
