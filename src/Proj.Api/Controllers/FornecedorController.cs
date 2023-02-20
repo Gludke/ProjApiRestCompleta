@@ -57,6 +57,7 @@ namespace Proj.Api.Controllers
             return CustomResponse(adress);
         }
 
+        []
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] AddFornecedorViewModel viewModel)
         {
