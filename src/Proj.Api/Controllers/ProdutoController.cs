@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Proj.Api.ViewModels.Produto;
 using Proj.Business.Intefaces;
@@ -8,6 +9,7 @@ using Proj.Business.Utils;
 
 namespace Proj.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class ProdutoController : MainController
     {
