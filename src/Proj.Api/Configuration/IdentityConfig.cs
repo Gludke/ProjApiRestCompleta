@@ -63,11 +63,13 @@ namespace Proj.Api.Configuration
                 {
                     ValidateIssuerSigningKey = true,//valida se o emissor do token é que recebe-o (aplicação back nos 2)
                     IssuerSigningKey = new SymmetricSecurityKey(key),//criptografa a chave
-                    
+
                     ValidateIssuer = true,//definido abaixo
                     ValidateAudience = true,//definido abaixo
                     ValidAudience = appSettings.ValidoEm,
-                    ValidIssuer = appSettings.Emissor
+                    ValidIssuer = appSettings.Emissor,
+                    //ValidAudiences -> É possível informar vários domínios para usar a API. 'Issuers' também possui
+                    
                 };
             });
 

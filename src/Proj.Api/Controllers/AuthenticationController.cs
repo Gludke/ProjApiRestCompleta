@@ -89,8 +89,9 @@ namespace Proj.Api.Controllers
 
         #region OTHER METHODS
 
-        private async Task<string> GerarJwt(string email)
+        private async Task<LoginResponseViewModel> GerarJwt(string email)
         {
+            var response = new LoginResponseViewModel();
             var userContext = await _userInManager.FindByEmailAsync(email);
             var userClaims = await _userInManager.GetClaimsAsync(userContext);
             var userRoles = await _userInManager.GetRolesAsync(userContext);
@@ -133,12 +134,24 @@ namespace Proj.Api.Controllers
 
             #endregion
 
-            return encodedToken;
+            //Preenchendo o retorno - Só serve para o Front-End da aplicação
+            response.AccessToken = encodedToken;
+            response.ExpiresIn = TimeSpan.FromHours(_appSettings.ExpiracaoHoras).TotalSeconds;
+            response.UserToken.Id = userContext.Id;
+            response.UserToken.Email = userContext.Email;
+            response.UserToken.Claims = userClaims.Where(uc => FilterTypeClaims(uc.Type)).Select(uc => new ClaimViewModel { Type = uc.Type, Value = uc.Value });
+
+            return response;
         }
 
         private static long ToUnixEpochDate(DateTime date)//retorna os segundo relativos à data informada
             => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
 
+        private bool FilterTypeClaims(string typeClaim)
+        {
+            return !typeClaim.Contains("sub") && !typeClaim.Contains("email") && !typeClaim.Contains("jti") && !typeClaim.Contains("nbf")
+                    && !typeClaim.Contains("iat");
+        }
 
         #endregion
 
