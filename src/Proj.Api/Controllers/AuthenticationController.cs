@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Proj.Api.Extensions;
 using Proj.Api.ViewModels.User;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace Proj.Api.Controllers
@@ -49,7 +50,7 @@ namespace Proj.Api.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return CustomResponse(GerarJwt());
+                return CustomResponse(await GerarJwt(viewModel.Email));
             }
             else
             {
@@ -70,7 +71,7 @@ namespace Proj.Api.Controllers
             //'true' - bloqueia o login do user em caso de 5 erros por alguns minutos
             var result = await _signInManager.PasswordSignInAsync(viewModel.Email, viewModel.Password, false, true);
             if (result.Succeeded)
-                return CustomResponse(GerarJwt());
+                return CustomResponse(await GerarJwt(viewModel.Email));
             
             if (result.IsLockedOut)//user bloqueado por tentativas
             {
@@ -88,8 +89,28 @@ namespace Proj.Api.Controllers
 
         #region OTHER METHODS
 
-        private string GerarJwt()
+        private async Task<string> GerarJwt(string email)
         {
+            var userContext = await _userInManager.FindByEmailAsync(email);
+            var userClaims = await _userInManager.GetClaimsAsync(userContext);
+            var userRoles = await _userInManager.GetRolesAsync(userContext);
+
+            //Passando outras claims essenciais
+            userClaims.Add(new Claim(JwtRegisteredClaimNames.Sub, userContext.Id));
+            userClaims.Add(new Claim(JwtRegisteredClaimNames.Email, userContext.Email));
+            userClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));//Id do token
+            userClaims.Add(new Claim(JwtRegisteredClaimNames.Nbf, ToUnixEpochDate(DateTime.UtcNow).ToString()));//"Não válido antes de"
+            userClaims.Add(new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.UtcNow).ToString(), ClaimValueTypes.Integer64));//Data em que foi emitido
+
+            //'Roles' são praticamente Claims
+            foreach (var role in userRoles) userClaims.Add(new Claim("role", role));
+
+            //Adicionando as claims no padrão exigido
+            var identityClaims = new ClaimsIdentity();
+            identityClaims.AddClaims(userClaims);
+
+            #region GERAÇÃO DO TOKEN
+
             //obj que manipula o JwtToken
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -100,6 +121,7 @@ namespace Proj.Api.Controllers
             {
                 Issuer = _appSettings.Emissor,
                 Audience = _appSettings.ValidoEm,
+                Subject = identityClaims,
                 //sempre UTC para n bugar caso o user esteja em outro lugar 
                 Expires = DateTime.UtcNow.AddHours(_appSettings.ExpiracaoHoras),
                 //credenciais de acesso
@@ -108,8 +130,15 @@ namespace Proj.Api.Controllers
 
             //serializando o token em JWT para web
             var encodedToken = tokenHandler.WriteToken(token);
+
+            #endregion
+
             return encodedToken;
         }
+
+        private static long ToUnixEpochDate(DateTime date)//retorna os segundo relativos à data informada
+            => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
+
 
         #endregion
 

@@ -3,6 +3,7 @@ using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Proj.Api.Extensions;
 using Proj.Api.ViewModels.Endereco;
 using Proj.Api.ViewModels.Fornecedor;
 
@@ -57,8 +58,8 @@ namespace Proj.Api.Controllers
             return CustomResponse(adress);
         }
 
-        []
         [HttpPost("register")]
+        [ClaimsAuthorize("Fornecedor", "Adicionar")]
         public async Task<IActionResult> Register([FromBody] AddFornecedorViewModel viewModel)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -69,6 +70,7 @@ namespace Proj.Api.Controllers
         }
 
         [HttpPut("update")]
+        [ClaimsAuthorize("Fornecedor", "Atualizar")]
         public async Task<IActionResult> Update([FromBody] UpdateFornecedorViewModel viewModel)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -79,6 +81,7 @@ namespace Proj.Api.Controllers
         }
 
         [HttpPut("update/endereco")]
+        [ClaimsAuthorize("Fornecedor", "Atualizar")]
         public async Task<IActionResult> UpdateAdress([FromBody] UpdateEnderecoViewModel viewModel)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -89,6 +92,7 @@ namespace Proj.Api.Controllers
         }
 
         [HttpDelete("delete/{id:guid}")]
+        [ClaimsAuthorize("Fornecedor", "Remover")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var fornecedorDb = await _fornecedorRepository.GetFornecedorEndereco(id);
