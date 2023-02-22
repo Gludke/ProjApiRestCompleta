@@ -2,6 +2,7 @@
 using DevIO.Business.Notificacoes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Proj.Business.Intefaces;
 
 namespace Proj.Api.Controllers
 {
@@ -9,10 +10,23 @@ namespace Proj.Api.Controllers
     public class MainController : ControllerBase
     {
         private readonly INotificador _notificador;
+        public readonly IUserContext _userContext;//public porque as classes filhas precisam ver a prop
 
-        public MainController(INotificador notificador)
+        public Guid UserContextId { get; set; }
+        public bool UserContextAutenticado { get; set; }
+
+        public MainController(INotificador notificador, 
+                              IUserContext userContext)
         {
             _notificador = notificador;
+            _userContext = userContext;
+
+            //Sugestão para facilitar
+            if (userContext.IsAuthenticated())
+            {
+                UserContextId = userContext.GetUserId();
+                UserContextAutenticado = true;
+            }
         }
 
         protected bool OperationValid()

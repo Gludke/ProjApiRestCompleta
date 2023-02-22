@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Proj.Api.Extensions;
 using Proj.Api.ViewModels.User;
+using Proj.Business.Intefaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -21,16 +22,18 @@ namespace Proj.Api.Controllers
         private readonly UserManager<IdentityUser> _userInManager;
         //Classe criada contendo as configs do JWT
         private readonly AppSettings _appSettings;
-
+        private readonly IUserContext _userContext;
 
         public AuthenticationController(INotificador notificador,
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userInManager,
-            IOptions<AppSettings> appSettings) : base(notificador)
+            IOptions<AppSettings> appSettings,
+            IUserContext userContext) : base(notificador, userContext)
         {
             _signInManager = signInManager;
             _userInManager = userInManager;
             _appSettings = appSettings.Value;
+            _userContext = userContext;
         }
 
         [HttpPost("nova")]

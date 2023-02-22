@@ -3,6 +3,7 @@ using DevIO.Business.Intefaces;
 using DevIO.Business.Models;
 using Microsoft.AspNetCore.Mvc;
 using Proj.Api.ViewModels.Produto;
+using Proj.Business.Intefaces;
 using Proj.Business.Utils;
 
 namespace Proj.Api.Controllers
@@ -13,15 +14,18 @@ namespace Proj.Api.Controllers
         private readonly IProdutoRepository _produtoRepository;
         private readonly IProdutoService _produtoService;
         private readonly IMapper _mapper;
+        private readonly IUserContext _userContext;
 
         public ProdutoController(INotificador notificador,
                                  IProdutoRepository produtoRepository,
                                  IProdutoService produtoService,
-                                 IMapper mapper) : base(notificador)
+                                 IMapper mapper,
+                                 IUserContext userContext) : base(notificador, userContext)
         {
             _produtoRepository = produtoRepository;
             _produtoService = produtoService;
             _mapper = mapper;
+            _userContext = userContext;
         }
 
         [HttpGet("get/all")]

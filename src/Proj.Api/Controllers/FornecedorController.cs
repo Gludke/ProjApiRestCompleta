@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Proj.Api.Extensions;
 using Proj.Api.ViewModels.Endereco;
 using Proj.Api.ViewModels.Fornecedor;
+using Proj.Business.Intefaces;
 
 namespace Proj.Api.Controllers
 {
@@ -17,17 +18,20 @@ namespace Proj.Api.Controllers
         private readonly IEnderecoRepository _enderecoRepository;
         private readonly IFornecedorService _fornecedorService;
         private readonly IMapper _mapper;
+        private readonly IUserContext _userContext;
 
         public FornecedorController(IFornecedorRepository fornecedorRepository,
                                     IMapper mapper,
                                     IFornecedorService fornecedorService,
                                     INotificador notificador,
-                                    IEnderecoRepository enderecoRepository) : base(notificador)
+                                    IEnderecoRepository enderecoRepository,
+                                    IUserContext userContext) : base(notificador, userContext)
         {
             _fornecedorRepository = fornecedorRepository;
             _mapper = mapper;
             _fornecedorService = fornecedorService;
             _enderecoRepository = enderecoRepository;
+            _userContext = userContext;
         }
 
 
