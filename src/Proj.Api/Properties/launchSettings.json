@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "Proj.Api": {
+    "Proj.Api - Dev": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
@@ -19,6 +19,18 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+
+    "Proj.Api - Prod": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7583;http://localhost:5583",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      }
+    },
+
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,

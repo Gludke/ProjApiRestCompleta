@@ -29,14 +29,14 @@ namespace Proj.Api.Configuration
                         .AllowAnyHeader());
 
 
-                //options.AddPolicy("Production",
-                //    builder =>
-                //        builder
-                //            .WithMethods("GET")
-                //            .WithOrigins("http://desenvolvedor.io")
-                //            .SetIsOriginAllowedToAllowWildcardSubdomains()
-                //            //.WithHeaders(HeaderNames.ContentType, "x-custom-header")
-                //            .AllowAnyHeader());
+                options.AddPolicy("Production",
+                    builder =>
+                        builder
+                            .WithMethods("GET")//Somente essas requisições
+                            .WithOrigins("http://desenvolvedor.io")//Somente dessas origens
+                            .SetIsOriginAllowedToAllowWildcardSubdomains()//Permite apps rodando em sub-domínios dessa app principal
+                            //.WithHeaders(HeaderNames.ContentType, "x-custom-header")
+                            .AllowAnyHeader());
             });
 
             return services;
@@ -46,11 +46,18 @@ namespace Proj.Api.Configuration
         {
             app.UseHttpsRedirection();
 
+            //Usando a política de acesso 'Development' configurada acima. Chamar sempre antes do 'UseMvc()' e das autorizações
+            if (env.IsDevelopment())
+            {
+                app.UseCors("Development");
+            }
+            else
+            {
+                app.UseCors("Production");
+            }
+
             app.UseAuthentication();
             app.UseAuthorization();
-
-            //Usando a política de acesso 'Development' configurada acima
-            app.UseCors("Development");
 
             return app;
         }
