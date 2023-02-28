@@ -10,6 +10,13 @@ namespace Proj.Api.Configuration
             services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+            //Configurando as versões da API
+            services.AddApiVersioning(opt => {
+                //Assume a versão default se alguma nao for especificada
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+
+            });
+
             //Impede que a API faça as validações automáticas dela, dessa forma apenas as nossas
             //validações serão utilizadas, permitindo padronização de erros.
             services.Configure<ApiBehaviorOptions>(opt =>
